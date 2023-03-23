@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="264.0" prefWidth="296.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainController">
-    <Button onAction="#openDummyWindow" text="dummy" />
-    <Button onAction="#openAdvancedWindow" text="advanced" />
-</VBox>
+<Pane prefHeight="358.0" prefWidth="434.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainController">
+   <Button layoutX="148.0" layoutY="88.0" onAction="#openDummyWindow" prefHeight="38.0" prefWidth="107.0" text="dummy">
+      <font>
+         <Font name="Bodoni MT" size="20.0" />
+      </font></Button>
+   <Button layoutX="148.0" layoutY="179.0" onAction="#openAdvancedWindow" prefHeight="38.0" prefWidth="107.0" text="advanced">
+      <font>
+         <Font name="Bodoni MT" size="20.0" />
+      </font></Button>
+   <Label layoutX="125.0" layoutY="14.0" prefHeight="34.0" prefWidth="167.0" text="Seleccione un nivel">
+      <font>
+         <Font name="Bodoni MT Condensed" size="28.0" />
+      </font>
+   </Label>
+</Pane>
