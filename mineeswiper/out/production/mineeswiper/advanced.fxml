@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
 
-<Pane prefHeight="345.0" prefWidth="351.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1">
-    <Label text="Advanced" />
-</Pane>
+<GridPane fx:id="gridPane" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AdvancedController">
+    <columnConstraints>
+        <ColumnConstraints prefWidth="50.0" />
+        <ColumnConstraints prefWidth="50.0" />
+        <ColumnConstraints prefWidth="50.0" />
+        <ColumnConstraints prefWidth="50.0" />
+        <ColumnConstraints prefWidth="50.0" />
+        <ColumnConstraints prefWidth="50.0" />
+        <ColumnConstraints prefWidth="50.0" />
+        <ColumnConstraints prefWidth="50.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints prefHeight="50.0" />
+        <RowConstraints prefHeight="50.0" />
+        <RowConstraints prefHeight="50.0" />
+        <RowConstraints prefHeight="50.0" />
+        <RowConstraints prefHeight="50.0" />
+        <RowConstraints prefHeight="50.0" />
+        <RowConstraints prefHeight="50.0" />
+        <RowConstraints prefHeight="50.0" />
+    </rowConstraints>
+</GridPane>

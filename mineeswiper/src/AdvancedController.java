@@ -6,7 +6,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.input.MouseButton;
 
-public class dummyController {
+public class AdvancedController {
     @FXML
     private GridPane gridPane;
 
@@ -42,7 +42,7 @@ public class dummyController {
                             } else {
                                 // El usuario seleccionó una mina, fin del juego
                                 // Aquí puede agregar lógica para mostrar todas las minas
-                                System.out.println("Perdiste");
+                                System.out.println("Hay una bomba, perdiste");
                             }
                         } else if (event.getButton() == MouseButton.SECONDARY) {
                             int row = GridPane.getRowIndex(button);
@@ -101,7 +101,7 @@ public class dummyController {
 
         if (valores[row][col] == -1) {
             // Mostrar la mina seleccionada y finalizar el juego
-            System.out.println("Hay una bomba, perdiste");
+            System.out.println("Perdiste");
             return;
         } else if (valores[row][col] == 0) {
             // Mostrar la casilla vacía y revelar las casillas adyacentes que también son vacías
