@@ -11,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.input.MouseButton;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class AdvancedController {
     @FXML
@@ -42,6 +44,9 @@ public class AdvancedController {
                 button.setPrefSize(50, 50);
                 botones[i][j] = button;
                 gridPane.add(button, j, i);
+                // Cambiar el tipo de letra de los números en los botones
+                Font font = Font.font("Arial", FontWeight.BOLD,20 ); // Cambiar el tipo de letra a Arial, negrita y tamaño 16
+                button.setFont(font);
 
                 /**
                  * Manejo de eventos para revelar la casilla
@@ -67,7 +72,7 @@ public class AdvancedController {
                             int row = GridPane.getRowIndex(button);
                             int col = GridPane.getColumnIndex(button);
                             if (botones[row][col].getText().equals("")) {
-                                botones[row][col].setText("F");
+                                botones[row][col].setText("B");
                                 numMinasRestantes--;
                             } else {
                                 botones[row][col].setText("");
