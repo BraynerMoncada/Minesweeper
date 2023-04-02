@@ -1,27 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<GridPane fx:id="gridPane" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dummyController">
-    <columnConstraints>
-        <ColumnConstraints prefWidth="50.0" />
-        <ColumnConstraints prefWidth="50.0" />
-        <ColumnConstraints prefWidth="50.0" />
-        <ColumnConstraints prefWidth="50.0" />
-        <ColumnConstraints prefWidth="50.0" />
-        <ColumnConstraints prefWidth="50.0" />
-        <ColumnConstraints prefWidth="50.0" />
-        <ColumnConstraints prefWidth="50.0" />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints prefHeight="50.0" />
-        <RowConstraints prefHeight="50.0" />
-        <RowConstraints prefHeight="50.0" />
-        <RowConstraints prefHeight="50.0" />
-        <RowConstraints prefHeight="50.0" />
-        <RowConstraints prefHeight="50.0" />
-        <RowConstraints prefHeight="50.0" />
-        <RowConstraints prefHeight="50.0" />
-    </rowConstraints>
-</GridPane>
+<AnchorPane prefHeight="395.0" prefWidth="394.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dummyController">
+    <GridPane fx:id="gridPane" layoutX="10.0" layoutY="50.0" prefHeight="345.0" prefWidth="375.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="50.0">
+        <columnConstraints>
+            <ColumnConstraints maxWidth="48.4" minWidth="44.4" prefWidth="48.4" />
+            <ColumnConstraints maxWidth="60.6" minWidth="48.4" prefWidth="54.4" />
+            <ColumnConstraints maxWidth="55.400000000000006" minWidth="43.400000000000006" prefWidth="50.0" />
+            <ColumnConstraints maxWidth="55.599999999999994" minWidth="47.599999999999994" prefWidth="47.599999999999994" />
+            <ColumnConstraints prefWidth="50.0" />
+            <ColumnConstraints prefWidth="50.0" />
+            <ColumnConstraints prefWidth="50.0" />
+            <ColumnConstraints prefWidth="50.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints prefHeight="50.0" />
+            <RowConstraints prefHeight="50.0" />
+            <RowConstraints prefHeight="50.0" />
+            <RowConstraints prefHeight="50.0" />
+            <RowConstraints prefHeight="50.0" />
+            <RowConstraints prefHeight="50.0" />
+            <RowConstraints prefHeight="50.0" />
+            <RowConstraints prefHeight="50.0" />
+        </rowConstraints>
+    </GridPane>
+   <Label fx:id="tiempoLabel" layoutX="278.0" layoutY="14.0" prefHeight="36.0" prefWidth="106.0" textFill="#ea4408">
+      <font>
+         <Font name="Haettenschweiler" size="26.0" />
+      </font>
+   </Label>
+   <Label fx:id="minasEncontradasLabel" layoutX="14.0" layoutY="14.0" prefHeight="36.0" prefWidth="86.0" text="0">
+      <font>
+         <Font name="Haettenschweiler" size="26.0" />
+      </font>
+   </Label>
+</AnchorPane>

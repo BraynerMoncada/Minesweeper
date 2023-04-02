@@ -5,10 +5,15 @@
  */
 
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.input.MouseButton;
@@ -27,6 +32,12 @@ public class dummyController {
 
     private boolean turnoJugador;
     private boolean juegoTermina;
+    public Label tiempoLabel;
+    private int tiempo = 0;
+    private Timer timer;
+    public Label minasEncontradasLabel;
+    public  int minasEncontradas = 0;
+
 
     @FXML
     /**
@@ -41,6 +52,15 @@ public class dummyController {
         turnoJugador = true;
         juegoTermina = false;
 
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                Platform.runLater(() -> {
+                    tiempo++;
+                    actualizarTiempo();
+                });
+            }
+        }, 0, 1000);
 
         /**
          * Agregar botones y manejo de eventos
@@ -82,7 +102,6 @@ public class dummyController {
                                 // Aquí puede agregar lógica para mostrar todas las minas
                                 button.setStyle("-fx-background-color: red");
                                 System.out.println("Hay una bomba, perdiste");
-
                                 Alert alert = new Alert(Alert.AlertType.ERROR);
                                 alert.setHeaderText(null);
                                 alert.setContentText("Perdiste!");
@@ -92,7 +111,6 @@ public class dummyController {
                                     Stage stage = (Stage) gridPane.getScene().getWindow(); // Obtiene la ventana actual
                                     stage.close(); // Cierra la ventana actual
                                 });
-
                                 alert.showAndWait();
 
 
@@ -104,6 +122,7 @@ public class dummyController {
                             int col = GridPane.getColumnIndex(button);
                             if (botones[row][col].getText().equals("")) {
                                 botones[row][col].setText("F");
+                                descubrirMina();
                                 numMinasRestantes--;
                             } else {
                                 botones[row][col].setText("");
@@ -179,6 +198,15 @@ public class dummyController {
                 }
             }
         }
+    }
+
+    private void actualizarTiempo() {
+        tiempoLabel.setText(String.format("%02d:%02d", tiempo / 60, tiempo % 60));
+    }
+    // Método que se llama cuando se descubre una mina
+    public void descubrirMina() {
+        minasEncontradas++;
+        minasEncontradasLabel.setText(Integer.toString(minasEncontradas));
     }
 
     private void revelarCasilla(int row, int col) {

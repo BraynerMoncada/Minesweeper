@@ -9,7 +9,7 @@ import javafx.stage.Stage;
  * Controlador de la ventana principal.
  * Autor: Brayner Moncada
  */
-public class MainController {
+public class menuController {
 
     private Stage primaryStage;
 
