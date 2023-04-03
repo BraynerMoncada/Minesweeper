@@ -215,17 +215,7 @@ public class dummyController {
             // Mostrar la mina seleccionada y finalizar el juego
             System.out.println("Perdiste");
             return;
-        } else if (valores[row][col] == 0) {
-            // Mostrar la casilla vacía y revelar las casillas adyacentes que también son vacías
-            botones[row][col].setText("0");
-            for (int r = row - 1; r <= row + 1; r++) {
-                for (int c = col - 1; c <= col + 1; c++) {
-                    if (r >= 0 && r < 8 && c >= 0 && c < 8 && botones[r][c].getText().equals("")) {
-                        revelarCasilla(r, c);
-                    }
-                }
-            }
-        } else {
+        }else {
             // Mostrar el número de minas adyacentes en la casilla seleccionada
             botones[row][col].setText(String.valueOf(valores[row][col]));
         }
@@ -250,10 +240,10 @@ public class dummyController {
                     int numBanderasAdyacentes = getNumBanderasAdyacentes(i, j);
                     if (numMinasAdyacentes >= 0 && numCasillasAdyacentes - numBanderasAdyacentes == numMinasAdyacentes) {
                         casillaConBandera = true;
-                        botones[i][j].setText("F");
+                        botones[i][j].setText("FC");
                         break;
                     } else if (numMinasAdyacentes >= 0 && numMinasAdyacentes == numCasillasAdyacentes) {
-                        revelarCasilla(i, j);
+                        revelarCasillaComputador(i, j);
                         casillaRevelada = true;
                         break;
                     }
@@ -272,7 +262,7 @@ public class dummyController {
                 row = rand.nextInt(8);
                 col = rand.nextInt(8);
             }
-            revelarCasilla(row, col);
+            revelarCasillaComputador(row, col);
         }
     }
 
@@ -318,45 +308,19 @@ public class dummyController {
      * Método para revelar una casilla para el computador
      */
     private void revelarCasillaComputador(int row, int col) {
+        botones[row][col].setText(String.valueOf(valores[row][col]));
         botones[row][col].setDisable(true);
         if (valores[row][col] == -1) {
-            botones[row][col].setText("X");
             botones[row][col].setStyle("-fx-background-color: blue;");
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Computador Ganó");
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Computador Perdio");
+            alert.setOnHidden(e -> {
+                Stage stage = (Stage) gridPane.getScene().getWindow(); // Obtiene la ventana actual
+                stage.close(); // Cierra la ventana actual
+            });
             alert.showAndWait();
-            System.exit(0);
-        } else if (valores[row][col] == 0) {
-            botones[row][col].setText("");
-            if (row > 0 && col > 0 && !botones[row - 1][col - 1].isDisabled()) {
-                revelarCasillaComputador(row - 1, col - 1);
-            }
-            if (row > 0 && !botones[row - 1][col].isDisabled()) {
-                revelarCasillaComputador(row - 1, col);
-            }
-            if (row > 0 && col < 7 && !botones[row - 1][col + 1].isDisabled()) {
-                revelarCasillaComputador(row - 1, col + 1);
-            }
-            if (col > 0 && !botones[row][col - 1].isDisabled()) {
-                revelarCasillaComputador(row, col - 1);
-            }
-            if (col < 7 && !botones[row][col + 1].isDisabled()) {
-                revelarCasillaComputador(row, col + 1);
-            }
-            if (row < 7 && col > 0 && !botones[row + 1][col - 1].isDisabled()) {
-                revelarCasillaComputador(row + 1, col - 1);
-            }
-            if (row < 7 && !botones[row + 1][col].isDisabled()) {
-                revelarCasillaComputador(row + 1, col);
-            }
-            if (row < 7 && col < 7 && !botones[row + 1][col + 1].isDisabled()) {
-                revelarCasillaComputador(row + 1, col + 1);
-            }
-        } else {
-            botones[row][col].setText(Integer.toString(valores[row][col]));
         }
+
     }
-
-
 
 }
 

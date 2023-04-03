@@ -23,6 +23,7 @@ public void start(Stage primaryStage) throws Exception{
     primaryStage.setTitle("Mineeswiper");
     primaryStage.setScene(new Scene(root, 420, 340));
     primaryStage.show();
+
 }
 
     /**
