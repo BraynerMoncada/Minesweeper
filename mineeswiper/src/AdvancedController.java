@@ -4,6 +4,7 @@
  @author BraynerMoncada
  */
 
+import java.sql.SQLOutput;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -51,6 +52,9 @@ public class AdvancedController {
         numMinasRestantes = 10;
         turnoJugador = true;
         juegoTermina = false;
+        ListaEnlazada listaSegura = new ListaEnlazada();
+        ListaEnlazada listaIncertidumbre = new ListaEnlazada();
+        ListaEnlazada listaGeneral = new ListaEnlazada();
 
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -89,7 +93,7 @@ public class AdvancedController {
                                 revelarCasilla(row, col);
                                 if (turnoJugador) {
                                     turnoJugador = false;
-                                    seleccionarCasillaComputador();
+                                    seleccionarCasillaComputador(listaGeneral,listaSegura,listaIncertidumbre);
                                 } else {
                                     turnoJugador = true;
                                 }
@@ -108,7 +112,7 @@ public class AdvancedController {
                                 alert.getDialogPane().setStyle("-fx-font-size: 20; -fx-font-family: 'Arial';"); // Cambiar el tamaño y la fuente de la ventana
                                 alert.setOnHidden(e -> {
                                     Stage stage = (Stage) gridPane.getScene().getWindow(); // Obtiene la ventana actual
-                                    stage.close(); // Cierra la ventana actual
+                                    //stage.close(); // Cierra la ventana actual
                                 });
                                 alert.showAndWait();
 
@@ -217,6 +221,7 @@ public class AdvancedController {
         }else {
             // Mostrar el número de minas adyacentes en la casilla seleccionada
             botones[row][col].setText(String.valueOf(valores[row][col]));
+
         }
     }
 
@@ -225,108 +230,127 @@ public class AdvancedController {
      * @author Brayner Moncada
      * En este metodo es el turno del computador,selecciona una casilla aleatoria.
      */
-    private void seleccionarCasillaComputador() {
+
+    public void seleccionarCasillaComputador(ListaEnlazada listaGeneral, ListaEnlazada listaSegura, ListaEnlazada listaIncertidumbre) {
         Random rand = new Random();
-        boolean casillaRevelada = false;
-        boolean casillaConBandera = false;
 
-        // Buscar casillas adyacentes que no han sido reveladas y que tengan un valor igual al número de minas adyacentes
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (botones[i][j].getText().equals("")) {
-                    int numMinasAdyacentes = getNumMinasAdyacentes(i, j);
-                    int numCasillasAdyacentes = getNumCasillasAdyacentes(i, j);
-                    int numBanderasAdyacentes = getNumBanderasAdyacentes(i, j);
-                    if (numMinasAdyacentes >= 0 && numCasillasAdyacentes - numBanderasAdyacentes == numMinasAdyacentes) {
-                        casillaConBandera = true;
-                        botones[i][j].setText("F");
-                        break;
-                    } else if (numMinasAdyacentes >= 0 && numMinasAdyacentes == numCasillasAdyacentes) {
-                        revelarCasillaComputador(i, j);
-                        casillaRevelada = true;
-                        break;
-                    }
-                }
-            }
-            if (casillaRevelada || casillaConBandera) {
-                break;
+        int index = rand.nextInt(listaGeneral.getTamaño() + 1);
+        Nodo nodoSeleccionado = listaGeneral.getNodo(index);
+
+        if (listaSegura.contiene(nodoSeleccionado) || listaIncertidumbre.contiene(nodoSeleccionado)) {
+            return; // seleccionar otro nodo
+        }
+
+        if (listaGeneral.contiene(nodoSeleccionado)) {
+            listaGeneral.eliminarPorNodo(nodoSeleccionado);
+
+            // Agrega el nodo seleccionado a la lista correspondiente (listaSegura o listaIncertidumbre)
+            if (valores[nodoSeleccionado.getFila()][nodoSeleccionado.getColumna()] == 0) {
+                listaSegura.agregarAlFinal(nodoSeleccionado);
+            } else {
+                listaIncertidumbre.agregarAlFinal(nodoSeleccionado);
             }
         }
 
-        // Si no se encontraron casillas con la pista, seleccionar una casilla al azar y revélarla
-        if (!casillaRevelada && !casillaConBandera) {
-            int row = rand.nextInt(8);
-            int col = rand.nextInt(8);
-            while (!botones[row][col].getText().equals("")) {
-                row = rand.nextInt(8);
-                col = rand.nextInt(8);
+
+        // Si hay nodos seguros en la listaSegura, selecciona uno y revela la casilla correspondiente
+        if (listaSegura.getTamaño() != 0) {
+            Nodo nodoSeguroSeleccionado = listaSegura.seleccionarNodoAleatorio();
+            int row2 = nodoSeguroSeleccionado.getFila();
+            int col2 = nodoSeguroSeleccionado.getColumna();
+            botones[row2][col2].fire();
+            revelarCasillaComputador(row2, col2);
+        } else {
+            // Si no hay nodos seguros, selecciona uno de la listaIncertidumbre y revela la casilla correspondiente
+            if (listaIncertidumbre.getTamaño() != 0) {
+                Nodo nodoIncertidumbreSeleccionado = listaIncertidumbre.seleccionarNodoAleatorio();
+                int row1 = nodoIncertidumbreSeleccionado.getFila();
+                int col1 = nodoIncertidumbreSeleccionado.getColumna();
+                botones[row1][col1].fire();
+                revelarCasillaComputador(row1, col1);
             }
-            revelarCasillaComputador(row, col);
-        }
-        /**
-         * Crea la lista enlazada con todas las celdas disponibles
-         */
-        ListaEnlazada listaGeneral = new ListaEnlazada();
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (botones[i][j].getText().equals("")) {
-                    listaGeneral.agregarAlFinal(new Nodo(i, j));
-                }
-            }
+            // Si tanto la listaSegura como la listaIncertidumbre están vacías, no hay nada más que hacer.
+            return;
         }
 
-        // Imprime la lista enlazada para verificar que se agregaron las celdas correctamente
+        /**public void seleccionarCasillaComputador() {
+         Random rand = new Random();
+
+
+         // Recorre el tablero y agrega cualquier casilla vacía a la listaGeneral
+         for (int i = 0; i < 8; i++) {
+         for (int j = 0; j < 8; j++) {
+         if (botones[i][j].getText().equals("")) {
+         listaGeneral.agregarAlFinal(new Nodo(i, j));
+         }
+         }
+         }
+
+         // Crea una copia de la listaGeneral
+         ListaEnlazada listaGeneralCopia = new ListaEnlazada();
+         Nodo nodoActual = listaGeneral.getPrimero();
+         while (nodoActual != null) {
+         int x = nodoActual.getFila();
+         int y = nodoActual.getColumna();
+         listaGeneralCopia.agregarAlFinal(new Nodo(x, y));
+         nodoActual = nodoActual.getSiguiente();
+         }
+
+         // Selecciona un nodo aleatorio de la listaGeneral y elimínalo si no se encuentra en listaSegura o listaIncertidumbre
+         int index = rand.nextInt(listaGeneralCopia.getTamaño());
+         Nodo nodoSeleccionado = listaGeneralCopia.getNodo(index);
+
+         if(listaGeneral.contiene(nodoSeleccionado)){
+         listaGeneral.eliminarPorNodo(nodoSeleccionado);
+         }
+
+         if (listaSegura.contiene(nodoSeleccionado) || listaIncertidumbre.contiene(nodoSeleccionado)) {
+         return; // seleccionar otro nodo
+         }
+
+
+         // Agrega el nodo seleccionado a la lista correspondiente (listaSegura o listaIncertidumbre)
+         if (valores[nodoSeleccionado.getFila()][nodoSeleccionado.getColumna()] == 0) {
+         listaSegura.agregarAlFinal(nodoSeleccionado);
+         } else {
+         listaIncertidumbre.agregarAlFinal(nodoSeleccionado);
+         }
+
+         // Imprime las listas para verificar los nodos seleccionados y eliminados
+         System.out.println("Lista General:\n");
+         imprimirListaEnlazada(listaGeneral);
+         System.out.println("Lista Segura:\n");
+         imprimirListaEnlazada(listaSegura);
+         System.out.println("Lista Incertidumbre:\n");
+         imprimirListaEnlazada(listaIncertidumbre);
+
+         // Si hay nodos seguros en la listaSegura, selecciona uno y revela la casilla correspondiente
+         if (listaSegura.getTamaño() != 0) {
+         Nodo nodoSeguroSeleccionado = listaSegura.seleccionarNodoAleatorio();
+         int row2 = nodoSeguroSeleccionado.getFila();
+         int col2 = nodoSeguroSeleccionado.getColumna();
+         botones[row2][col2].fire();
+         revelarCasillaComputador(row2, col2);
+         } else {
+         // Si no hay nodos seguros, selecciona uno de la listaIncertidumbre y revela la casilla correspondiente
+         Nodo nodoIncertidumbreSeleccionado = listaIncertidumbre.seleccionarNodoAleatorio();
+         int row1 = nodoIncertidumbreSeleccionado.getFila();
+         int col1 = nodoIncertidumbreSeleccionado.getColumna();
+         botones[row1][col1].fire();
+         revelarCasillaComputador(row1, col1);
+         return;
+         }
+         }*/
+        // Imprime las listas para verificar los nodos seleccionados y eliminados
+        System.out.println("Lista General:\n");
         imprimirListaEnlazada(listaGeneral);
-
-        // Selecciona una celda aleatoria de la lista enlazada
-        Nodo nodoSeleccionado = listaGeneral.seleccionarNodoAleatorio();
-        int row = nodoSeleccionado.getFila();
-        int col = nodoSeleccionado.getColumna();
-        botones[row][col].fire();
+        System.out.println("Lista Segura:\n");
+        imprimirListaEnlazada(listaSegura);
+        System.out.println("Lista Incertidumbre:\n");
+        imprimirListaEnlazada(listaIncertidumbre);
 
     }
 
-    private int getNumBanderasAdyacentes(int row, int col) {
-        int numBanderas = 0;
-        for (int i = Math.max(row - 1, 0); i <= Math.min(row + 1, 7); i++) {
-            for (int j = Math.max(col - 1, 0); j <= Math.min(col + 1, 7); j++) {
-                if (botones[i][j].getText().equals("F")) {
-                    numBanderas++;
-                }
-            }
-        }
-        return numBanderas;
-    }
-
-
-    private int getNumMinasAdyacentes(int row, int col) {
-        int numMinas = 0;
-        for (int i = Math.max(row - 1, 0); i <= Math.min(row + 1, 7); i++) {
-            for (int j = Math.max(col - 1, 0); j <= Math.min(col + 1, 7); j++) {
-                if (minas[i][j] && (i != row || j != col)) {
-                    numMinas++;
-                }
-            }
-        }
-        return numMinas;
-    }
-
-    private int getNumCasillasAdyacentes(int row, int col) {
-        int numCasillas = 0;
-        for (int i = Math.max(row - 1, 0); i <= Math.min(row + 1, 7); i++) {
-            for (int j = Math.max(col - 1, 0); j <= Math.min(col + 1, 7); j++) {
-                if (i != row || j != col) {
-                    numCasillas++;
-                }
-            }
-        }
-        return numCasillas;
-    }
-
-
-    /**
-     * Método para revelar una casilla para el computador
-     */
     private void revelarCasillaComputador(int row, int col) {
         botones[row][col].setText(String.valueOf(valores[row][col]));
         botones[row][col].setDisable(true);
@@ -335,22 +359,18 @@ public class AdvancedController {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Computador Perdio");
             alert.setOnHidden(e -> {
                 Stage stage = (Stage) gridPane.getScene().getWindow(); // Obtiene la ventana actual
-                stage.close(); // Cierra la ventana actual
+                //stage.close(); // Cierra la ventana actual
             });
             alert.showAndWait();
         }
 
     }
-
-
     public void imprimirListaEnlazada(ListaEnlazada lista) {
         Nodo nodoActual = lista.getPrimero();
         while (nodoActual != null) {
             System.out.print("(" + nodoActual.getFila() +"," + nodoActual.getColumna() + ")" + " ");
             nodoActual = nodoActual.getSiguiente();
         }
-        System.out.println();
-    }
-
-}
+        System.out.println("\n");
+    }}
 

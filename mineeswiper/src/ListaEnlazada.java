@@ -17,21 +17,18 @@ public class ListaEnlazada {
         this.primero = null;
         this.ultimo = null;
     }
-    /**
-     Agrega un nuevo nodo con las coordenadas de fila y columna especificadas al final de la lista.
-     @param fila la coordenada de fila del nodo.
-     @param columna la coordenada de columna del nodo.
-     */
-    public void agregar(int fila, int columna) {
-        Nodo nuevoNodo = new Nodo(fila, columna);
-        if (this.primero == null) {
-            this.primero = nuevoNodo;
-            this.ultimo = nuevoNodo;
-        } else {
-            this.ultimo.setSiguiente(nuevoNodo);
-            this.ultimo = nuevoNodo;
+
+    public boolean contiene(Nodo nodo) {
+        Nodo nodoActual = primero;
+        while (nodoActual != null) {
+            if (nodo.getFila() == nodoActual.getFila() && nodo.getColumna() == nodoActual.getColumna()) {
+                return true;
+            }
+            nodoActual = nodoActual.getSiguiente();
         }
+        return false;
     }
+
     /**
      Quita el primer nodo de la lista y lo devuelve.
      Si la lista está vacía, devuelve null.
@@ -95,4 +92,55 @@ public class ListaEnlazada {
     public Nodo getPrimero() {
         return this.primero;
     }
+
+
+    public Nodo getNodo(int indice) {
+        Nodo actual = this.primero;
+        int contador = 0;
+        while (actual != null) {
+            if (contador == indice) {
+                return actual;
+            }
+            contador++;
+            actual = actual.getSiguiente();
+        }
+        return null;
+    }
+
+    public int getTamaño() {
+        return this.tamaño;
+    }
+
+    /**
+     * Metodo que elimina nodos por indice
+     * @param nodo
+     */
+    public void eliminarPorNodo(Nodo nodo) {
+        if (nodo == null) {
+            return;
+        }
+
+        // Si el nodo a eliminar es el primero de la lista
+        if (nodo == primero) {
+            primero = nodo.getSiguiente();
+            tamaño--;
+            return;
+        }
+
+        // Busca el nodo anterior al que se desea eliminar
+        Nodo nodoActual = primero;
+        while (nodoActual != null && nodoActual.getSiguiente() != nodo) {
+            nodoActual = nodoActual.getSiguiente();
+        }
+
+        // Si se encontró el nodo anterior, elimina el nodo deseado
+        if (nodoActual != null) {
+            nodoActual.setSiguiente(nodo.getSiguiente());
+            tamaño--;
+        }
+    }
+
+
+
+
 }
