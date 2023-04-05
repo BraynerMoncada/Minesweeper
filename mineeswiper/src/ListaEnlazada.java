@@ -18,34 +18,6 @@ public class ListaEnlazada {
         this.ultimo = null;
     }
 
-    public boolean contiene(Nodo nodo) {
-        Nodo nodoActual = primero;
-        while (nodoActual != null) {
-            if (nodo.getFila() == nodoActual.getFila() && nodo.getColumna() == nodoActual.getColumna()) {
-                return true;
-            }
-            nodoActual = nodoActual.getSiguiente();
-        }
-        return false;
-    }
-
-    /**
-     Quita el primer nodo de la lista y lo devuelve.
-     Si la lista está vacía, devuelve null.
-     @return el primer nodo de la lista o null si la lista está vacía.
-     */
-    public Nodo quitar() {
-        if (this.primero == null) {
-            return null;
-        } else {
-            Nodo nodo = this.primero;
-            this.primero = this.primero.getSiguiente();
-            if (this.primero == null) {
-                this.ultimo = null;
-            }
-            return nodo;
-        }
-    }
     /**
      Agrega un nodo dado al final de la lista.
      @param nodo el nodo a agregar.
@@ -74,7 +46,6 @@ public class ListaEnlazada {
         if (this.tamaño == 0) {
             return null;
         }
-
         int index = (int) (Math.random() * this.tamaño);
         Nodo current = this.primero;
         while (index > 0) {
