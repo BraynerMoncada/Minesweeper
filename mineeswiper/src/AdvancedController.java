@@ -58,12 +58,13 @@ public class AdvancedController {
         numMinasRestantes = 10;
         turnoJugador = true;
         juegoTermina = false;
-        sugerencias = new Stack<String>();
         botonSugerencia = new Button();
+
         botonSugerencia.setOnAction(event -> {
             usarSugerencia();
         });
-        botonSugerencia.setDisable(true);
+        //botonSugerencia.setDisable(false);
+
 
 
         timer = new Timer();
@@ -235,49 +236,61 @@ public class AdvancedController {
      * @param col
      */
     private void revelarCasilla(int row, int col) {
-            if (valores[row][col] == -1) {
-                // Mostrar la mina seleccionada y finalizar el juego
-                System.out.println("Perdiste");
-                return;
-            } else {
-                // Mostrar el número de minas adyacentes en la casilla seleccionada
-                botones[row][col].setText(String.valueOf(valores[row][col]));
+        if (valores[row][col] == -1) {
+            // Mostrar la mina seleccionada y finalizar el juego
+            System.out.println("Perdiste");
+            return;
+        } else {
+            // Mostrar el número de minas adyacentes en la casilla seleccionada
+            botones[row][col].setText(String.valueOf(valores[row][col]));
 
-            }
-            contadorJugadas++;
-            if (contadorJugadas == 5) {
-                contadorJugadas = 0;
-                agregarSugerencia();
+        }
+        contadorJugadas++;
+        if (contadorJugadas == 5) {
+            contadorJugadas = 0;
+            agregarSugerencia();
         }
 
 
 
     }
+
+    /**
+     * En este metodo se obtinen sugerencias, y se agregan a una pila.
+     */
     private void agregarSugerencia() {
+        sugerencias = new Stack<String>();
         Random random = new Random();
         int row, col;
-        do {
-            row = random.nextInt(8);
-            col = random.nextInt(8);
-        } while (minas[row][col]);
-        sugerencias.push(row + "," + col);
-        botonSugerencia.setDisable(false);
-    }
-
-    private void usarSugerencia() {
-        if (!sugerencias.empty()) {
-            String[] coords = sugerencias.pop().split(",");
-            int row = Integer.parseInt(coords[0]);
-            int col = Integer.parseInt(coords[1]);
-            if (botones[row][col].getText().equals("")) {
-                botones[row][col].setStyle("-fx-background-color: lightgray");
-            } else {
-                usarSugerencia();
-            }
-            botonSugerencia.setDisable(sugerencias.empty());
+        row = random.nextInt(8);
+        col = random.nextInt(8);
+        if(valores[row][col] != -1){
+            sugerencias.push(row + "," + col);
         }
+        System.out.println("Pila: " + sugerencias);
+        System.out.println("Se sugiere hacer click en:" + row + "," + col);
+        //botonSugerencia.setDisable(false);
+
     }
 
+
+    /**
+     * Metodo para usar las sugerencias del juego.
+     */
+    @FXML
+    private void usarSugerencia() {
+        if(!sugerencias.isEmpty()) {
+            String sugerencia = sugerencias.pop();
+            String[] partes = sugerencia.split(",");
+            int row = Integer.parseInt(partes[0]);
+            int col = Integer.parseInt(partes[1]);
+            botones[row][col].fire();
+            botones[row][col].setStyle("-fx-background-color: yellow;");
+            revelarCasilla(row,col);
+        }
+        System.out.println("No hay sugerencias");
+    }
+    
     /**
      *
      * @author Brayner Moncada
@@ -287,7 +300,6 @@ public class AdvancedController {
      * casillas con incertidumbre (pueden tener minas cerca). Si ambas listas están vacías, no se realiza ninguna selección.
      */
     public void seleccionarCasillaComputador() {
-        Random rand = new Random();
         ListaEnlazada listaSegura = new ListaEnlazada();
         ListaEnlazada listaIncertidumbre = new ListaEnlazada();
         ListaEnlazada listaGeneral = new ListaEnlazada();
@@ -364,4 +376,5 @@ public class AdvancedController {
             nodoActual = nodoActual.getSiguiente();
         }
         System.out.println("\n");
-    }}
+    }
+}

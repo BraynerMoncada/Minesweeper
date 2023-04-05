@@ -19,6 +19,7 @@ public class Nodo {
     public int getColumna() {
         return columna;
     }
+
     public int getValor() {
         return valor;
     }
@@ -32,13 +33,4 @@ public class Nodo {
 
         this.siguiente = siguiente;
     }
-
-    public Nodo getAnterior() {
-        return anterior;
-    }
-
-    public void setAnterior(Nodo anterior) {
-        this.anterior = anterior;
-    }
-
 }
