@@ -88,12 +88,8 @@ public class dummyController {
                             int col = GridPane.getColumnIndex(button);
                             if (!minas[row][col]) {
                                 revelarCasilla(row, col);
-                                if (turnoJugador) {
-                                    turnoJugador = false;
-                                    seleccionarCasillaComputador();
-                                } else {
-                                    turnoJugador = true;
-                                }
+                                seleccionarCasillaComputador();
+
                             } else {
                                 /**
                                  * El usuario seleccionó una mina, fin del juego
