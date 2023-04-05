@@ -65,19 +65,6 @@ public class ListaEnlazada {
     }
 
 
-    public Nodo getNodo(int indice) {
-        Nodo actual = this.primero;
-        int contador = 0;
-        while (actual != null) {
-            if (contador == indice) {
-                return actual;
-            }
-            contador++;
-            actual = actual.getSiguiente();
-        }
-        return null;
-    }
-
     public int getTamaño() {
         return this.tamaño;
     }

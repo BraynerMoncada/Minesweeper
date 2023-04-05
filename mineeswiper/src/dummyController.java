@@ -119,6 +119,7 @@ public class dummyController {
                             if (botones[row][col].getText().equals("")) {
                                 botones[row][col].setText("F");
                                 descubrirMina();
+                                seleccionarCasillaComputador();
                                 numMinasRestantes--;
                             } else {
                                 botones[row][col].setText("");

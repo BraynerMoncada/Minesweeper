@@ -37,4 +37,5 @@
             <Font name="Haettenschweiler" size="26.0" />
         </font>
     </Label>
+   <Button fx:id="botonSugerencia" layoutX="158.0" layoutY="19.0" mnemonicParsing="false" text="Sugerencias" />
 </AnchorPane>
