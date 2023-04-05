@@ -59,10 +59,10 @@ public class AdvancedController {
         turnoJugador = true;
         juegoTermina = false;
         botonSugerencia = new Button();
-
         botonSugerencia.setOnAction(event -> {
             usarSugerencia();
         });
+        sugerencias = new Stack<String>();
         //botonSugerencia.setDisable(false);
 
 
@@ -243,6 +243,7 @@ public class AdvancedController {
         } else {
             // Mostrar el número de minas adyacentes en la casilla seleccionada
             botones[row][col].setText(String.valueOf(valores[row][col]));
+            botones[row][col].setDisable(true);
 
         }
         contadorJugadas++;
@@ -259,19 +260,25 @@ public class AdvancedController {
      * En este metodo se obtinen sugerencias, y se agregan a una pila.
      */
     private void agregarSugerencia() {
-        sugerencias = new Stack<String>();
         Random random = new Random();
         int row, col;
-        row = random.nextInt(8);
-        col = random.nextInt(8);
-        if(valores[row][col] != -1){
+        do {
+            row = random.nextInt(8);
+            col = random.nextInt(8);
+        } while (botones[row][col].isDisable());
+
+        botones[row][col].setDisable(true);
+        if (valores[row][col] != -1) {
             sugerencias.push(row + "," + col);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Tienes una nueva sugerencia en: \n" +
+                    "(" + row + "," + col + ")");
+            alert.showAndWait();
         }
         System.out.println("Pila: " + sugerencias);
         System.out.println("Se sugiere hacer click en:" + row + "," + col);
         //botonSugerencia.setDisable(false);
-
     }
+
 
 
     /**
