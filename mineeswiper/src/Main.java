@@ -24,6 +24,10 @@ public void start(Stage primaryStage) throws Exception{
     primaryStage.setScene(new Scene(root, 420, 340));
     primaryStage.show();
 
+
+
+
+
 }
 
     /**

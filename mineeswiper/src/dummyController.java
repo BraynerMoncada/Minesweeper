@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -30,14 +31,14 @@ public class dummyController {
     private int[][] valores;
     private int numMinasRestantes;
 
-    private boolean turnoJugador;
-    private boolean juegoTermina;
     public Label tiempoLabel;
     private int tiempo = 0;
     private Timer timer;
     public Label minasEncontradasLabel;
     public  int minasEncontradas = 0;
 
+    public int selectedRow;
+    public int selectedCol;
 
     @FXML
     /**
@@ -49,8 +50,7 @@ public class dummyController {
         minas = new boolean[8][8];
         valores = new int[8][8];
         numMinasRestantes = 10;
-        turnoJugador = true;
-        juegoTermina = false;
+
 
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -83,6 +83,8 @@ public class dummyController {
                 button.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
+
+
                         if (event.getButton() == MouseButton.PRIMARY) {
                             int row = GridPane.getRowIndex(button);
                             int col = GridPane.getColumnIndex(button);

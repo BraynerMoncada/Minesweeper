@@ -123,7 +123,7 @@ public class AdvancedController {
                                 alert.getDialogPane().setStyle("-fx-font-size: 20; -fx-font-family: 'Arial';"); // Cambiar el tamaño y la fuente de la ventana
                                 alert.setOnHidden(e -> {
                                     Stage stage = (Stage) gridPane.getScene().getWindow(); // Obtiene la ventana actual
-                                    //stage.close(); // Cierra la ventana actual
+                                    stage.close(); // Cierra la ventana actual
                                 });
                                 alert.showAndWait();
 
@@ -365,7 +365,7 @@ public class AdvancedController {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Computador Perdio");
             alert.setOnHidden(e -> {
                 Stage stage = (Stage) gridPane.getScene().getWindow(); // Obtiene la ventana actual
-                //stage.close(); // Cierra la ventana actual
+                stage.close(); // Cierra la ventana actual
             });
             alert.showAndWait();
         }
