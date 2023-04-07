@@ -51,6 +51,15 @@ public class dummyController {
         valores = new int[8][8];
         numMinasRestantes = 10;
 
+        SerialTest tester = new SerialTest();
+        try {
+            tester.connect("COM7");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        gridPane.setFocusTraversable(true);
+        gridPane.requestFocus();
 
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -146,8 +155,84 @@ public class dummyController {
                         }
                     }
                 });
+                /**
+                 * Manejo de eventos para el teclado
+                 */
+                gridPane.setOnKeyPressed(e -> {
+                    // Obtener la casilla actualmente seleccionada
+                    Button currentButton = botones[selectedRow][selectedCol];
+                    System.out.println(tester.movimiento);
+                    // Manejar eventos de flechas del teclado
+                        if(tester.movimiento.equals("a")){
+                            if (selectedRow > 0) {
+                                // Desseleccionar la casilla actual
+                                currentButton.setStyle("");
+
+                                // Seleccionar la casilla arriba
+                                selectedRow--;
+                                Button upButton = botones[selectedRow][selectedCol];
+                                upButton.setStyle("-fx-background-color: yellow");
+                            }
+                            }
+                        else if(tester.movimiento.equals("b")){
+                            if (selectedRow < 7) {
+                                // Desseleccionar la casilla actual
+                                currentButton.setStyle("");
+
+                                // Seleccionar la casilla abajo
+                                selectedRow++;
+                                Button downButton = botones[selectedRow][selectedCol];
+                                downButton.setStyle("-fx-background-color: yellow");
+                            }
+                            }
+                        else if(tester.movimiento.equals("i")) {
+                            if (selectedCol > 0) {
+                                // Desseleccionar la casilla actual
+                                currentButton.setStyle("");
+
+                                // Seleccionar la casilla a la izquierda
+                                selectedCol--;
+                                Button leftButton = botones[selectedRow][selectedCol];
+                                leftButton.setStyle("-fx-background-color: yellow");
+                            }
+                            }
+                        else if(tester.movimiento.equals("d")) {
+                            if (selectedCol < 7) {
+                                // Desseleccionar la casilla actual
+                                currentButton.setStyle("");
+
+                                // Seleccionar la casilla a la derecha
+                                selectedCol++;
+                                Button rightButton = botones[selectedRow][selectedCol];
+                                rightButton.setStyle("-fx-background-color: yellow");
+                            }
+                        }
+                        else if(tester.movimiento.equals("c")) {
+                            // Simular un clic en la casilla seleccionada
+                            currentButton.fire();
+                            if (minas[selectedRow][selectedCol]) {
+                                System.out.println("Hay una bomba, perdiste");
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setHeaderText(null);
+                                alert.setContentText("Perdiste!");
+                                alert.getDialogPane().setPrefSize(400, 200); // Establecer el tamaño de la ventana en píxeles
+                                alert.getDialogPane().setStyle("-fx-font-size: 20; -fx-font-family: 'Arial';"); // Cambiar el tamaño y la fuente de la ventana
+                                alert.setOnHidden(a -> {
+                                    Stage stage = (Stage) gridPane.getScene().getWindow(); // Obtiene la ventana actual
+                                    stage.close(); // Cierra la ventana actual
+                                });
+                                alert.showAndWait();
+                            }
+
+                            revelarCasilla(selectedRow, selectedCol);
+                            seleccionarCasillaComputador();
+                        }
+
+                });
+
             }
         }
+
 
         /**
          * Agregar minas aleatorias
@@ -197,6 +282,7 @@ public class dummyController {
                 }
             }
         }
+
     }
 
     private void actualizarTiempo() {
@@ -322,4 +408,3 @@ public class dummyController {
     }
 
 }
-

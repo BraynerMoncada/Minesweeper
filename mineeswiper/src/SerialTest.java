@@ -1,11 +1,18 @@
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortMessageListener;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+
+
+
 
 public class SerialTest implements SerialPortMessageListener {
     private SerialPort serialPort;
+    public String movimiento = "NC";
+
 
     /**
      * Establece la conexión con el puerto serial especificado y lo configura con los valores predeterminados.
@@ -67,12 +74,32 @@ public class SerialTest implements SerialPortMessageListener {
         try {
             while (inputStream.available() > 0) {
                 int numBytes = inputStream.read(buffer);
-                System.out.print(new String(buffer, 0, numBytes));
+                String receivedData = new String(buffer, 0, numBytes);
+                // Procesar los datos recibidos
+
+                if (receivedData.contains("A")) {
+                    System.out.print("Detecta Arriba\n");
+                    movimiento = "a";
+                } else if (receivedData.contains("b")) {
+                    System.out.print("Detecta Abajo\n");
+                    movimiento = "b";
+                } else if (receivedData.contains("I")) {
+                    System.out.print("Detecta Izquierda\n");
+                    movimiento = "i";
+                } else if (receivedData.contains("D")) {
+                    System.out.print("Detecta Derecha\n");
+                    movimiento = "d";
+                } else {
+                    System.out.println("No se detectan clicks");
+
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
+
 
     /**
      * Devuelve un array de bytes vacío, lo que indica que no se espera un delimitador de mensajes.

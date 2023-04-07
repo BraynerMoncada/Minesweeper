@@ -26,12 +26,7 @@ public class menuController {
      */
     @FXML
     private void openDummyWindow() {
-        SerialTest tester = new SerialTest();
-        try {
-            tester.connect("COM7");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("dummy.fxml"));
             Parent root = fxmlLoader.load();
@@ -39,7 +34,7 @@ public class menuController {
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-            tester.disconnect();
+            //tester.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,11 +63,5 @@ public class menuController {
             e.printStackTrace();
         }
     }
-
-    /**
-     * Cierra la ventana actual y muestra la ventana principal.
-     * @param stage el Stage de la ventana actual.
-     */
-
 
 }
