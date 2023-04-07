@@ -7,8 +7,10 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 
-
-
+/**
+ * En esta clase se implementa la conexion serial
+ * @author BraynerMoncada
+ */
 public class SerialTest implements SerialPortMessageListener {
     private SerialPort serialPort;
     public String movimiento = "NC";

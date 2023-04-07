@@ -9,6 +9,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+/**
+ * En esta clase se ejecuta la aplicacion
+ * @author BraynerMoncada
+ */
 public class Main extends Application {
     /**
      }

@@ -7,6 +7,7 @@
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 import javafx.application.Platform;
@@ -21,6 +22,11 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+
+/**
+ * En esta clase se controla todo el nivel dummy
+ * @author BraynerMoncada
+ */
 
 public class dummyController {
     @FXML
@@ -37,8 +43,8 @@ public class dummyController {
     public Label minasEncontradasLabel;
     public  int minasEncontradas = 0;
 
-    public int selectedRow;
-    public int selectedCol;
+    public int selectedRow =0;
+    public int selectedCol = 0;
 
     @FXML
     /**
@@ -51,6 +57,7 @@ public class dummyController {
         valores = new int[8][8];
         numMinasRestantes = 10;
 
+
         SerialTest tester = new SerialTest();
         try {
             tester.connect("COM7");
@@ -61,6 +68,7 @@ public class dummyController {
         gridPane.setFocusTraversable(true);
         gridPane.requestFocus();
 
+
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -70,6 +78,20 @@ public class dummyController {
                 });
             }
         }, 0, 1000);
+        /**
+         * Manejo de eventos para el teclado
+         */
+        TimerTask tarea = new TimerTask() {
+            public void run() {
+                String movimiento = tester.movimiento;
+                Platform.runLater(() -> {
+                    moverCasilla(selectedRow, selectedCol, movimiento);
+                    tester.movimiento = ""; // Establecer movimiento en cadena vacía
+                });
+            }
+        };
+        timer.schedule(tarea, 0, 500);
+
 
         /**
          * Agregar botones y manejo de eventos
@@ -155,81 +177,6 @@ public class dummyController {
                         }
                     }
                 });
-                /**
-                 * Manejo de eventos para el teclado
-                 */
-                gridPane.setOnKeyPressed(e -> {
-                    // Obtener la casilla actualmente seleccionada
-                    Button currentButton = botones[selectedRow][selectedCol];
-                    System.out.println(tester.movimiento);
-                    // Manejar eventos de flechas del teclado
-                        if(tester.movimiento.equals("a")){
-                            if (selectedRow > 0) {
-                                // Desseleccionar la casilla actual
-                                currentButton.setStyle("");
-
-                                // Seleccionar la casilla arriba
-                                selectedRow--;
-                                Button upButton = botones[selectedRow][selectedCol];
-                                upButton.setStyle("-fx-background-color: yellow");
-                            }
-                            }
-                        else if(tester.movimiento.equals("b")){
-                            if (selectedRow < 7) {
-                                // Desseleccionar la casilla actual
-                                currentButton.setStyle("");
-
-                                // Seleccionar la casilla abajo
-                                selectedRow++;
-                                Button downButton = botones[selectedRow][selectedCol];
-                                downButton.setStyle("-fx-background-color: yellow");
-                            }
-                            }
-                        else if(tester.movimiento.equals("i")) {
-                            if (selectedCol > 0) {
-                                // Desseleccionar la casilla actual
-                                currentButton.setStyle("");
-
-                                // Seleccionar la casilla a la izquierda
-                                selectedCol--;
-                                Button leftButton = botones[selectedRow][selectedCol];
-                                leftButton.setStyle("-fx-background-color: yellow");
-                            }
-                            }
-                        else if(tester.movimiento.equals("d")) {
-                            if (selectedCol < 7) {
-                                // Desseleccionar la casilla actual
-                                currentButton.setStyle("");
-
-                                // Seleccionar la casilla a la derecha
-                                selectedCol++;
-                                Button rightButton = botones[selectedRow][selectedCol];
-                                rightButton.setStyle("-fx-background-color: yellow");
-                            }
-                        }
-                        else if(tester.movimiento.equals("c")) {
-                            // Simular un clic en la casilla seleccionada
-                            currentButton.fire();
-                            if (minas[selectedRow][selectedCol]) {
-                                System.out.println("Hay una bomba, perdiste");
-                                Alert alert = new Alert(Alert.AlertType.ERROR);
-                                alert.setHeaderText(null);
-                                alert.setContentText("Perdiste!");
-                                alert.getDialogPane().setPrefSize(400, 200); // Establecer el tamaño de la ventana en píxeles
-                                alert.getDialogPane().setStyle("-fx-font-size: 20; -fx-font-family: 'Arial';"); // Cambiar el tamaño y la fuente de la ventana
-                                alert.setOnHidden(a -> {
-                                    Stage stage = (Stage) gridPane.getScene().getWindow(); // Obtiene la ventana actual
-                                    stage.close(); // Cierra la ventana actual
-                                });
-                                alert.showAndWait();
-                            }
-
-                            revelarCasilla(selectedRow, selectedCol);
-                            seleccionarCasillaComputador();
-                        }
-
-                });
-
             }
         }
 
@@ -405,6 +352,41 @@ public class dummyController {
             alert.showAndWait();
         }
 
+    }
+    /**
+     * Este metodo se encarga de revelar las casillas que el computador selecciona.
+     * @param row
+     * @param col
+     */
+    private void moverCasilla(int row, int col, String movimiento) {
+        // Desseleccionar la casilla actual
+        Button currentButton = botones[selectedRow][selectedCol];
+        currentButton.setStyle("");
+
+        // Actualizar las coordenadas de la casilla seleccionada
+        switch (movimiento) {
+            case "a":
+                selectedRow = Math.max(selectedRow - 1, 0);
+                break;
+            case "b":
+                selectedRow = Math.min(selectedRow + 1, botones.length - 1);
+                break;
+            case "i":
+                selectedCol = Math.max(selectedCol - 1, 0);
+                break;
+            case "d":
+                selectedCol = Math.min(selectedCol + 1, botones[0].length - 1);
+                break;
+            default:
+                // Si movimiento no es "a", "b", "i" o "d", no se hace nada
+                break;
+        }
+
+        // Seleccionar la nueva casilla
+        Button newButton = botones[selectedRow][selectedCol];
+        // Establecer el foco en el nuevo botón seleccionado
+        //newButton.requestFocus();
+        newButton.setStyle("-fx-background-color: yellow");
     }
 
 }

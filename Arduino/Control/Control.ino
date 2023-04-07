@@ -4,7 +4,7 @@ int b_arriba = 10;
 int b_abajo = 9;
 
 unsigned long lastSendTime = 0;
-const unsigned long sendInterval = 1000; // Intervalo mínimo entre mensajes en ms
+const unsigned long sendInterval = 100; // Intervalo mínimo entre mensajes en ms
 
 void setup() {
   pinMode(b_izquierda, INPUT);

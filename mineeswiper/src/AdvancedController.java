@@ -1,7 +1,6 @@
 /**
-
- Esta clase es el controlador para el juego dummy de Buscaminas
- @author BraynerMoncada
+ * Esta clase es el controlador para el juego dummy de Buscaminas
+ *  @author BraynerMoncada
  */
 
 import java.sql.SQLOutput;
@@ -43,6 +42,8 @@ public class AdvancedController {
     public  int minasEncontradas = 0;
     private Stack<String> sugerencias;
     int contadorJugadas = 0;
+    public int selectedRow =0;
+    public int selectedCol = 0;
 
 
 
@@ -63,8 +64,15 @@ public class AdvancedController {
             usarSugerencia();
         });
         sugerencias = new Stack<String>();
-        //botonSugerencia.setDisable(false);
+        SerialTest tester = new SerialTest();
+        try {
+            tester.connect("COM7");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        gridPane.setFocusTraversable(true);
+        gridPane.requestFocus();
 
 
         timer = new Timer();
@@ -76,6 +84,17 @@ public class AdvancedController {
                 });
             }
         }, 0, 1000);
+
+        TimerTask tarea = new TimerTask() {
+            public void run() {
+                String movimiento = tester.movimiento;
+                Platform.runLater(() -> {
+                    moverCasilla(selectedRow, selectedCol, movimiento);
+                    tester.movimiento = ""; // Establecer movimiento en cadena vacía
+                });
+            }
+        };
+        timer.schedule(tarea, 0, 500);
 
         /**
          * Agregar botones y manejo de eventos
@@ -383,5 +402,42 @@ public class AdvancedController {
             nodoActual = nodoActual.getSiguiente();
         }
         System.out.println("\n");
+    }
+
+    /**
+     * Metodo que permite el movimiento entre casillas utiliazando los datos obtenidos en la conexionSerial
+     * @param row
+     * @param col
+     * @param movimiento
+     */
+    private void moverCasilla(int row, int col, String movimiento) {
+        // Desseleccionar la casilla actual
+        Button currentButton = botones[selectedRow][selectedCol];
+        currentButton.setStyle("");
+
+        // Actualizar las coordenadas de la casilla seleccionada
+        switch (movimiento) {
+            case "a":
+                selectedRow = Math.max(selectedRow - 1, 0);
+                break;
+            case "b":
+                selectedRow = Math.min(selectedRow + 1, botones.length - 1);
+                break;
+            case "i":
+                selectedCol = Math.max(selectedCol - 1, 0);
+                break;
+            case "d":
+                selectedCol = Math.min(selectedCol + 1, botones[0].length - 1);
+                break;
+            default:
+                // Si movimiento no es "a", "b", "i" o "d", no se hace nada
+                break;
+        }
+
+        // Seleccionar la nueva casilla
+        Button newButton = botones[selectedRow][selectedCol];
+        // Establecer el foco en el nuevo botón seleccionado
+        //newButton.requestFocus();
+        newButton.setStyle("-fx-background-color: yellow");
     }
 }
