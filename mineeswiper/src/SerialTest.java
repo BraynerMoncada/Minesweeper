@@ -78,7 +78,7 @@ public class SerialTest implements SerialPortMessageListener {
                 int numBytes = inputStream.read(buffer);
                 String receivedData = new String(buffer, 0, numBytes);
                 // Procesar los datos recibidos
-
+                System.out.println(receivedData);
                 if (receivedData.contains("A")) {
                     System.out.print("Detecta Arriba\n");
                     movimiento = "a";
@@ -91,6 +91,9 @@ public class SerialTest implements SerialPortMessageListener {
                 } else if (receivedData.contains("D")) {
                     System.out.print("Detecta Derecha\n");
                     movimiento = "d";
+                }else if(receivedData.contains("c")){
+                    System.out.println("Detecta ENTER");
+                    movimiento = "c";
                 } else {
                     System.out.println("No se detectan clicks");
 
@@ -101,7 +104,6 @@ public class SerialTest implements SerialPortMessageListener {
         }
 
     }
-
 
     /**
      * Devuelve un array de bytes vacío, lo que indica que no se espera un delimitador de mensajes.

@@ -377,6 +377,31 @@ public class dummyController {
             case "d":
                 selectedCol = Math.min(selectedCol + 1, botones[0].length - 1);
                 break;
+            case "c":
+                if(!minas[selectedRow][selectedCol]) {
+                    revelarCasilla(selectedRow,selectedCol);
+                    seleccionarCasillaComputador();
+
+                }else {
+                    /**
+                     * El usuario seleccionó una mina, fin del juego
+                     * @author BraynerMoncada
+                     */
+                    // Aquí puede agregar lógica para mostrar todas las minas
+                    System.out.println("Hay una bomba, perdiste");
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Perdiste!");
+                    alert.getDialogPane().setPrefSize(400, 200); // Establecer el tamaño de la ventana en píxeles
+                    alert.getDialogPane().setStyle("-fx-font-size: 20; -fx-font-family: 'Arial';"); // Cambiar el tamaño y la fuente de la ventana
+                    alert.setOnHidden(e -> {
+                        Stage stage = (Stage) gridPane.getScene().getWindow(); // Obtiene la ventana actual
+                        stage.close(); // Cierra la ventana actual
+                    });
+
+                    alert.showAndWait();
+                    break;
+                }
             default:
                 // Si movimiento no es "a", "b", "i" o "d", no se hace nada
                 break;
