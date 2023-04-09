@@ -3,6 +3,8 @@
  *  @author BraynerMoncada
  */
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.Random;
 import java.util.Stack;
@@ -21,6 +23,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+
+import javax.sound.sampled.*;
 
 public class AdvancedController {
     @FXML
@@ -121,6 +125,8 @@ public class AdvancedController {
                             int col = GridPane.getColumnIndex(button);
                             if (!minas[row][col]) {
                                 revelarCasilla(row, col);
+                                String filePath = "/C:\\Users\\brayn\\OneDrive\\Desktop\\Minesweeper\\mineeswiper\\src\\song/SinMina.wav";
+                                playSound(filePath);
                                 if (turnoJugador) {
                                     turnoJugador = false;
                                     seleccionarCasillaComputador();
@@ -134,6 +140,8 @@ public class AdvancedController {
                                  */
                                 // Aquí puede agregar lógica para mostrar todas las minas
                                 button.setStyle("-fx-background-color: red");
+                                String filePath = "/C:\\Users\\brayn\\OneDrive\\Desktop\\Minesweeper\\mineeswiper\\src\\song/ConMina.wav";
+                                playSound(filePath);
                                 System.out.println("Hay una bomba, perdiste");
                                 Alert alert = new Alert(Alert.AlertType.ERROR);
                                 alert.setHeaderText(null);
@@ -155,6 +163,7 @@ public class AdvancedController {
                             int col = GridPane.getColumnIndex(button);
                             if (botones[row][col].getText().equals("")) {
                                 botones[row][col].setText("F");
+                                tester.encenderLed();
                                 descubrirMina();
                                 numMinasRestantes--;
                                 seleccionarCasillaComputador();
@@ -431,6 +440,8 @@ public class AdvancedController {
                 break;
             case "c":
                 if(!minas[selectedRow][selectedCol]) {
+                    String filePath = "/C:\\Users\\brayn\\OneDrive\\Desktop\\Minesweeper\\mineeswiper\\src\\song/SinMina.wav";
+                    //playSound(filePath);
                     revelarCasilla(selectedRow,selectedCol);
                     seleccionarCasillaComputador();
 
@@ -440,6 +451,8 @@ public class AdvancedController {
                      * @author BraynerMoncada
                      */
                     // Aquí puede agregar lógica para mostrar todas las minas
+                    String filePath = "/C:\\Users\\brayn\\OneDrive\\Desktop\\Minesweeper\\mineeswiper\\src\\song/ConMina.wav";
+                    //playSound(filePath);
                     System.out.println("Hay una bomba, perdiste");
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setHeaderText(null);
@@ -463,5 +476,21 @@ public class AdvancedController {
         // Establecer el foco en el nuevo botón seleccionado
         //newButton.requestFocus();
         newButton.setStyle("-fx-background-color: yellow");
+    }
+
+    /**
+     *Metodo para reproducir audio
+     * @param filePath
+     */
+    public static void playSound(String filePath) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+            System.out.println("Error al reproducir el sonido: " + ex.getMessage());
+
+        }
     }
 }

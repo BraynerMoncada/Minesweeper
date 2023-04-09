@@ -4,6 +4,7 @@ import com.fazecast.jSerialComm.SerialPortMessageListener;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 
 
@@ -49,6 +50,17 @@ public class SerialTest implements SerialPortMessageListener {
             System.out.println("¡Conexión cerrada!");
         }
     }
+    public void encenderLed() {
+        try {
+            OutputStream outputStream = serialPort.getOutputStream();
+            String mensaje = "EncenderLED\n"; // Mensaje que enviarás a Arduino
+            outputStream.write(mensaje.getBytes());
+            outputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Indica que se desea escuchar eventos de datos disponibles en el puerto serial.
