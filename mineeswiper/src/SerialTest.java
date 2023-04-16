@@ -50,6 +50,10 @@ public class SerialTest implements SerialPortMessageListener {
             System.out.println("¡Conexión cerrada!");
         }
     }
+
+    /**
+     * Este metodo nos permite enviar un mensaje a traves del puerto serial para encender un led
+     */
     public void encenderLed() {
         try {
             OutputStream outputStream = serialPort.getOutputStream();
@@ -60,6 +64,34 @@ public class SerialTest implements SerialPortMessageListener {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Este metedo nos permite enviar un mensaje a traves del puerto serial para reproducir un sonido
+     */
+    public void reproducirTono1() {
+        try {
+            OutputStream outputStream = serialPort.getOutputStream();
+            String mensaje = "ReproducirTono1\n"; // Mensaje que enviarás a Arduino
+            outputStream.write(mensaje.getBytes());
+            outputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Este metedo nos permite enviar un mensaje a traves del puerto serial para reproducir otro sonido
+     */
+    public void reproducirTono2() {
+        try {
+            OutputStream outputStream = serialPort.getOutputStream();
+            String mensaje = "ReproducirTono2\n"; // Mensaje que enviarás a Arduino
+            outputStream.write(mensaje.getBytes());
+            outputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     /**

@@ -126,7 +126,8 @@ public class AdvancedController {
                             if (!minas[row][col]) {
                                 revelarCasilla(row, col);
                                 String filePath = "/C:\\Users\\brayn\\OneDrive\\Desktop\\Minesweeper\\mineeswiper\\src\\song/SinMina.wav";
-                                playSound(filePath);
+                                //playSound(filePath);
+                                tester.reproducirTono1();
                                 if (turnoJugador) {
                                     turnoJugador = false;
                                     seleccionarCasillaComputador();
@@ -141,7 +142,8 @@ public class AdvancedController {
                                 // Aquí puede agregar lógica para mostrar todas las minas
                                 button.setStyle("-fx-background-color: red");
                                 String filePath = "/C:\\Users\\brayn\\OneDrive\\Desktop\\Minesweeper\\mineeswiper\\src\\song/ConMina.wav";
-                                playSound(filePath);
+                                //playSound(filePath);
+                                tester.reproducirTono2();
                                 System.out.println("Hay una bomba, perdiste");
                                 Alert alert = new Alert(Alert.AlertType.ERROR);
                                 alert.setHeaderText(null);
@@ -151,6 +153,7 @@ public class AdvancedController {
                                 alert.setOnHidden(e -> {
                                     Stage stage = (Stage) gridPane.getScene().getWindow(); // Obtiene la ventana actual
                                     stage.close(); // Cierra la ventana actual
+                                    tester.disconnect();
                                 });
                                 alert.showAndWait();
 

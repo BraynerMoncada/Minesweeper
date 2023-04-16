@@ -128,7 +128,8 @@ public class dummyController {
                             if (!minas[row][col]) {
                                 revelarCasilla(row, col);
                                 String filePath = "/C:\\Users\\brayn\\OneDrive\\Desktop\\Minesweeper\\mineeswiper\\src\\song/SinMina.wav";
-                                playSound(filePath);
+                                //playSound(filePath);
+                                tester.reproducirTono1();
                                 seleccionarCasillaComputador();
 
                             } else {
@@ -138,7 +139,8 @@ public class dummyController {
                                  */
                                 // Aquí puede agregar lógica para mostrar todas las minas
                                 String filePath = "/C:\\Users\\brayn\\OneDrive\\Desktop\\Minesweeper\\mineeswiper\\src\\song/ConMina.wav";
-                                playSound(filePath);
+                                //playSound(filePath);
+                                tester.reproducirTono2();
                                 button.setStyle("-fx-background-color: red");
                                 System.out.println("Hay una bomba, perdiste");
                                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -149,6 +151,7 @@ public class dummyController {
                                 alert.setOnHidden(e -> {
                                     Stage stage = (Stage) gridPane.getScene().getWindow(); // Obtiene la ventana actual
                                     stage.close(); // Cierra la ventana actual
+                                    tester.disconnect();
                                 });
                                 alert.showAndWait();
 
@@ -359,6 +362,7 @@ public class dummyController {
             alert.setOnHidden(e -> {
                 Stage stage = (Stage) gridPane.getScene().getWindow(); // Obtiene la ventana actual
                 stage.close(); // Cierra la ventana actual
+
             });
             alert.showAndWait();
         }

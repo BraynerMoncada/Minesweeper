@@ -4,6 +4,7 @@ int b_arriba = 10;
 int b_abajo = 9;
 int b_select = 3;
 int LED_PIN = 13;
+int buzzerPin = 6; // el pin del buzzer
 
 unsigned long lastSendTime = 0;
 const unsigned long sendInterval = 100; // Intervalo mínimo entre mensajes en ms
@@ -15,6 +16,7 @@ void setup() {
   pinMode(b_abajo, INPUT);
   pinMode(b_select,INPUT);
   pinMode(LED_PIN,OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
   Serial.begin(9600);
 }
 
@@ -41,7 +43,11 @@ void loop() {
       digitalWrite(LED_PIN, HIGH);
       delay(1000); // Esperar un segundo
       digitalWrite(LED_PIN, LOW);
-    } 
+    }else if (mensaje == "ReproducirTono1") {
+      tone(buzzerPin, 10, 500); // Reproduce un tono diferente en el buzzer durante 500 ms
+    }else if (mensaje == "ReproducirTono2"){
+       tone(buzzerPin, 100 , 500);
+    }
   }
 }
 
